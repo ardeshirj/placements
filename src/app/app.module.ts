@@ -10,7 +10,7 @@ import { reducers, metaReducers } from './reducers';
 import { environment } from '../environments/environment';
 import { AppEffects } from './app.effects';
 import { AppRoutingModule } from "./app.routing.module";
-import { InvoiceModule } from '../invoice/invoice.module';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @NgModule({
   declarations: [
