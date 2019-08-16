@@ -1,1 +1,10 @@
-<p>invoice-table works!</p>
+<table>
+  <tr *ngFor="let invoice of invoices | async">
+    <td>{{ invoice.actual_amount }}</td>
+    <td>{{ invoice.adjustments }}</td>
+    <td>{{ invoice.booked_amount }}</td>
+    <td>{{ invoice.campaign_id }}</td>
+    <td>{{ invoice.campaign_name }}</td>
+    <td>{{ invoice.line_item_name }}</td>
+  </tr>
+</table>

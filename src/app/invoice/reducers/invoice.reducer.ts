@@ -1,5 +1,6 @@
 import { Invoice } from '../models/invoice';
-import { createReducer } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
+import { InvoiceActions } from '../actions';
 
 export const invoiceFeatureKey = 'invoiceState';
 
@@ -12,5 +13,6 @@ export const initialState: State = {
 }
 
 export const reducer = createReducer(
-  initialState
+  initialState,
+  on(InvoiceActions.loadedInvoices, (state, { invoices }) => ({ invoices: invoices }))
 )

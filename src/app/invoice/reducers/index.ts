@@ -1,6 +1,7 @@
-import { Action, combineReducers } from "@ngrx/store";
+import { Action, combineReducers, createSelector, createFeatureSelector } from "@ngrx/store";
 
 import * as fromInvoices from "./invoice.reducer";
+import { Invoice } from '../models';
 
 export interface InvoiceState {
   // All states in this module...
@@ -12,3 +13,12 @@ export function reducers(state: InvoiceState | undefined, action: Action) {
     [fromInvoices.invoiceFeatureKey]: fromInvoices.reducer
   })(state, action);
 }
+
+export const getInvoiceState = createFeatureSelector<InvoiceState, fromInvoices.State>(
+  fromInvoices.invoiceFeatureKey
+);
+
+export const getInvoices = createSelector(
+  getInvoiceState,
+  state => state.invoices
+)

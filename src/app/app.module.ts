@@ -17,7 +17,12 @@ import { InvoiceModule } from './invoice/invoice.module';
     AppComponent
   ],
   imports: [
+    // Modules
     BrowserModule,
+    AppRoutingModule,
+    InvoiceModule,
+    
+    // forRoot
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
@@ -25,13 +30,12 @@ import { InvoiceModule } from './invoice/invoice.module';
         strictActionImmutability: true
       }
     }),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot([AppEffects]),
     StoreRouterConnectingModule.forRoot({
       routerState: RouterState.Minimal
     }),
-    AppRoutingModule,
-    InvoiceModule
+
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
