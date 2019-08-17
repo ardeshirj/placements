@@ -12,7 +12,8 @@ import * as fromInvoices from "../reducers";
   styleUrls: ['./invoice-table.component.scss']
 })
 export class InvoiceTableComponent implements OnInit {
-  private invoices: Observable<Invoice[]>;
+  invoices: Observable<Invoice[]>;
+  displayedColumns: string[];
 
   constructor(
     private _store: Store<fromInvoices.InvoiceState>
@@ -22,6 +23,13 @@ export class InvoiceTableComponent implements OnInit {
   ngOnInit() {
     this._store.dispatch(InvoiceActions.loadInvoices({ pageNumber: 1 }));
     this.invoices = this._store.select(fromInvoices.getInvoices);
+    this.displayedColumns = [
+      'actual_amount', 
+      'adjustments', 
+      'booked_amount', 
+      'campaign_name',
+      'line_item_name'
+    ];
   }
 
 }
