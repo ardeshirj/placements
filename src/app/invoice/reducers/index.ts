@@ -22,3 +22,8 @@ export const getInvoices = createSelector(
   getInvoiceState,
   state => state.invoices
 )
+
+export const getTotalCount = createSelector(
+  getInvoiceState,
+  state => state.totalCount
+)

@@ -15,10 +15,11 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./invoice-table.component.scss']
 })
 export class InvoiceTableComponent implements OnInit {
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
   invoices: Observable<Invoice[]>;
   totalCount: Observable<number>;
 
-  dataSource = new MatTableDataSource<Invoice>();
   displayedColumns: string[] = [
     'actual_amount', 
     'adjustments', 
@@ -37,8 +38,9 @@ export class InvoiceTableComponent implements OnInit {
     this.invoices = this._store.select(fromInvoices.getInvoices);
     this.totalCount = this._store.select(fromInvoices.getTotalCount);
 
-    this.invoices.subscribe((invoices: Invoice[]) => {
-      this.dataSource.data = invoices;
-    });
+    this.paginator.page.subscribe((_: any) => {
+      const pageNumber = this.paginator.pageIndex + 1;
+      this._store.dispatch(InvoiceActions.loadInvoices({ pageNumber: pageNumber }));
+    })
   }
 }

@@ -8,5 +8,5 @@ export const loadInvoices = createAction(
 
 export const loadedInvoices = createAction(
   '[Loaded Invoices] Loaded',
-  props<{ invoices: Invoice[] }>()
+  props<{ count: number, invoices: Invoice[] }>()
 )

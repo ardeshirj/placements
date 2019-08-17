@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 import { InvoiceTableComponent } from "./components/invoice-table.component";
 import { InvoiceEffects } from './effects/invoice.effects';
@@ -20,6 +21,7 @@ import * as fromRoot from "./reducers/invoice.reducer";
     CommonModule,
     HttpClientModule,
     MatTableModule,
+    MatPaginatorModule,
 
     // forFeature
     StoreModule.forFeature(fromRoot.invoiceFeatureKey, fromRoot.reducer),

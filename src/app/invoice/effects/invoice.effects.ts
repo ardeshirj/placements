@@ -12,7 +12,10 @@ export class InvoiceEffects {
     this._actions.pipe(
       ofType(InvoiceActions.loadInvoices),
       flatMap(({ pageNumber }) => this._invoiceService.getInvoices(pageNumber)),
-      map(invoices => InvoiceActions.loadedInvoices({ invoices }))
+      map(invoices => InvoiceActions.loadedInvoices({ 
+        count: invoices.count, 
+        invoices: invoices.items 
+      }))
     )
   )
 

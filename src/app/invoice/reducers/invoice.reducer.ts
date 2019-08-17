@@ -6,13 +6,20 @@ export const invoiceFeatureKey = 'invoiceState';
 
 export interface State {
   invoices: Invoice[];
+  totalCount: number;
 }
 
 export const initialState: State = {
-  invoices: []
+  invoices: [],
+  totalCount: 0
 }
 
 export const reducer = createReducer(
   initialState,
-  on(InvoiceActions.loadedInvoices, (state, { invoices }) => ({ invoices: invoices }))
+  on(
+    InvoiceActions.loadedInvoices, 
+    (state, { count, invoices }) => (
+      { totalCount: count, invoices: invoices }
+    )
+  )
 )
