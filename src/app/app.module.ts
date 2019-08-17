@@ -4,6 +4,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule, RouterState } from '@ngrx/router-store';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { reducers, metaReducers } from './reducers';
@@ -19,6 +20,7 @@ import { InvoiceModule } from './invoice/invoice.module';
   imports: [
     // Modules
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     InvoiceModule,
     
