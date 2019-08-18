@@ -1,13 +1,15 @@
 import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable, Subject, combineLatest, Subscribable, Subscription } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Store } from '@ngrx/store';
+import { Observable, Subject, combineLatest, Subscription } from 'rxjs';
+import { debounceTime, startWith, take } from 'rxjs/operators';
+
 
 import { InvoiceActions } from "../actions";
 import { Invoice } from '../models';
 import * as fromInvoices from "../reducers";
-import { debounceTime, startWith, distinctUntilChanged } from 'rxjs/operators';
-import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'invoice-table',
@@ -19,23 +21,21 @@ export class InvoiceTableComponent implements AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  private _previousFilter: string;
-
+  selection = new SelectionModel<Invoice>(true, []);
   invoices: Observable<Invoice[]>;
   totalCount: Observable<number>;
-
   filterSubject: Subject<string>;
-
-  filterSortPaginateSub: Subscription;
-  filterSortSub: Subscription;
-
+  subscriptions: Subscription[];
   displayedColumns: string[] = [
+    'select',
     'actual_amount', 
     'adjustments', 
     'booked_amount', 
     'campaign_name',
     'line_item_name'
   ];
+
+  private _invoices: Invoice[];
 
   constructor(
     private _store: Store<fromInvoices.InvoiceState>
@@ -48,7 +48,9 @@ export class InvoiceTableComponent implements AfterViewInit {
 
     this.filterSubject = new Subject<string>();
 
-    this.filterSortPaginateSub = combineLatest(
+    const invoicesSub = this.invoices.subscribe(invoices => this._invoices = invoices);
+
+    const filterSortPaginateSub = combineLatest(
       this.filterSubject.pipe(startWith(null), debounceTime(1000)),
       this.sort.sortChange.pipe(startWith(null)),
       this.paginator.page.pipe(startWith(null))
@@ -62,7 +64,7 @@ export class InvoiceTableComponent implements AfterViewInit {
       }))
     });
 
-    this.filterSortSub = combineLatest(
+    const filterSortSub = combineLatest(
       this.filterSubject.pipe(startWith(null), debounceTime(1000)),
       this.sort.sortChange.pipe(startWith(null)),
     ).subscribe(() => {
@@ -70,15 +72,27 @@ export class InvoiceTableComponent implements AfterViewInit {
         this.paginator.firstPage();
       } 
     })
+
+    this.subscriptions = [
+      invoicesSub,
+      filterSortPaginateSub,
+      filterSortSub
+    ]
   }
 
-  ngOnDestroy() {
-    if (this.filterSortPaginateSub) {
-      this.filterSortPaginateSub.unsubscribe();
-    }
+  isAllSelected() {
+    const numRows = this.selection.selected.length;
+    const numSelected = this._invoices.length;
+    return numSelected === numRows;
+  }
 
-    if (this.filterSortSub) {
-      this.filterSortSub.unsubscribe();
-    }
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this._invoices.forEach(row => this.selection.select(row));
+  }
+  
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
  }

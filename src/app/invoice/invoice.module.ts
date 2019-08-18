@@ -8,6 +8,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatInputModule } from "@angular/material/input";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatSortModule } from "@angular/material/sort";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 import { InvoiceTableComponent } from "./components/invoice-table.component";
 import { InvoiceEffects } from './effects/invoice.effects';
@@ -28,6 +29,7 @@ import * as fromRoot from "./reducers/invoice.reducer";
     MatInputModule,
     MatGridListModule,
     MatSortModule,
+    MatCheckboxModule,
 
     // forFeature
     StoreModule.forFeature(fromRoot.invoiceFeatureKey, fromRoot.reducer),
