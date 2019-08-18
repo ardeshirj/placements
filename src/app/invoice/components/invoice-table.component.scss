@@ -2,6 +2,10 @@ table {
   width : 100%
 }
 
-button {
-  margin: 16px 8px;
+.action-buttons {
+  position: absolute; left: 5px;
+}
+
+.filter-input {
+  position: absolute; right: 10px;
 }

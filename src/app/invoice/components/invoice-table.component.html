@@ -1,12 +1,14 @@
-<mat-grid-list cols="2" rowHeight="100px">
-  <mat-grid-tile>
-    <button mat-raised-button (click)="onReview()"> Review </button>
-  </mat-grid-tile>
+<mat-grid-list cols="1" rowHeight="80px">
+  <mat-grid-tile colspan=1>
+    <div class="action-buttons">
+     <button mat-raised-button (click)="onReview()"> Review </button>
+    </div>
 
-  <mat-grid-tile>
-    <mat-form-field>
-      <input matInput (keyup)="filterSubject.next($event.target.value)" placeholder="Filter">
-    </mat-form-field>
+    <div class="filter-input">
+      <mat-form-field>
+        <input matInput (keyup)="filterSubject.next($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+    </div>
   </mat-grid-tile>
 </mat-grid-list>
 
