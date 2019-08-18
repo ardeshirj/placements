@@ -22,6 +22,24 @@ export class InvoiceService {
     )
   }
 
+  filterInvoices(keyword: string, pageNumber: number) {
+    const httpParams = new HttpParams()
+      .set('q', keyword)
+      .set('_page', String(pageNumber));
+
+    return this._httpClient.get<Invoice[]>(
+      'http://localhost:3000/invoices',
+      { params: httpParams, observe: 'response' }
+    ).pipe(
+      map(response => {
+        return {
+          count: +response.headers.get('x-total-count'), 
+          items: response.body
+        }
+      })
+    )
+  }
+
   constructor(
     private _httpClient: HttpClient
   ) {

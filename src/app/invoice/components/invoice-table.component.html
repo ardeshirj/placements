@@ -1,3 +1,11 @@
+<mat-grid-list cols="1" rowHeight="100px">
+  <mat-grid-tile>
+    <mat-form-field>
+      <input matInput (keyup)="filterSubject.next($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>
+
 <table mat-table [dataSource]="invoices | async" class="mat-elevation-z8">
   <ng-container matColumnDef="actual_amount">
     <th mat-header-cell *matHeaderCellDef> Actual Amount </th>

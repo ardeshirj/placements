@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, Subject, combineLatest } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 
 import { InvoiceActions } from "../actions";
 import { Invoice } from '../models';
 import * as fromInvoices from "../reducers";
-import { MatTableDataSource } from '@angular/material/table';
-import { take } from 'rxjs/operators';
+import { debounceTime, map, flatMap, startWith, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'invoice-table',
@@ -19,6 +18,8 @@ export class InvoiceTableComponent implements OnInit {
 
   invoices: Observable<Invoice[]>;
   totalCount: Observable<number>;
+
+  filterSubject: Subject<string>;
 
   displayedColumns: string[] = [
     'actual_amount', 
@@ -35,12 +36,23 @@ export class InvoiceTableComponent implements OnInit {
 
   ngOnInit() {
     this._store.dispatch(InvoiceActions.loadInvoices({ pageNumber: 1 }));
+
     this.invoices = this._store.select(fromInvoices.getInvoices);
     this.totalCount = this._store.select(fromInvoices.getTotalCount);
 
-    this.paginator.page.subscribe((_: any) => {
-      const pageNumber = this.paginator.pageIndex + 1;
-      this._store.dispatch(InvoiceActions.loadInvoices({ pageNumber: pageNumber }));
-    })
+    this.filterSubject = new Subject<string>();
+
+    combineLatest(
+      this.filterSubject.pipe(startWith(null), debounceTime(1000)),
+      this.paginator.page.pipe(startWith(null)),
+    )
+    .subscribe(([keyword, pageEvent]) => {
+      if (keyword || pageEvent) {
+        this._store.dispatch(InvoiceActions.filterInvoices({ 
+          keyword: keyword, 
+          pageNumber: this.paginator.pageIndex + 1
+        }));
+      }
+    });
   }
 }

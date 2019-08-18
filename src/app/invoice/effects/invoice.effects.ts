@@ -5,7 +5,6 @@ import { flatMap, map } from "rxjs/operators"
 import { InvoiceActions } from "../actions";
 import { InvoiceService } from '../services/invoice.service';
 
-
 @Injectable()
 export class InvoiceEffects {
   getInvoices = createEffect(() => 
@@ -17,6 +16,17 @@ export class InvoiceEffects {
         invoices: invoices.items 
       }))
     )
+  )
+
+  filterInvoices = createEffect(() =>
+      this._actions.pipe(
+        ofType(InvoiceActions.filterInvoices),
+        flatMap(({ keyword, pageNumber }) => this._invoiceService.filterInvoices(keyword, pageNumber)),
+        map(invoices => InvoiceActions.loadedInvoices({ 
+          count: invoices.count, 
+          invoices: invoices.items 
+        }))
+      )
   )
 
   constructor(
