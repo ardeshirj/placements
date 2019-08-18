@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { InvoiceActions } from "../actions";
 import { Invoice } from '../models';
 import * as fromInvoices from "../reducers";
-import { debounceTime, map, flatMap, startWith, tap } from 'rxjs/operators';
+import { debounceTime, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'invoice-table',
@@ -15,6 +15,8 @@ import { debounceTime, map, flatMap, startWith, tap } from 'rxjs/operators';
 })
 export class InvoiceTableComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  private _previousFilter: string;
 
   invoices: Observable<Invoice[]>;
   totalCount: Observable<number>;
@@ -47,12 +49,16 @@ export class InvoiceTableComponent implements OnInit {
       this.paginator.page.pipe(startWith(null)),
     )
     .subscribe(([keyword, pageEvent]) => {
-      if (keyword || pageEvent) {
-        this._store.dispatch(InvoiceActions.filterInvoices({ 
-          keyword: keyword, 
-          pageNumber: this.paginator.pageIndex + 1
-        }));
+      if (keyword !== this._previousFilter) {
+        this.paginator.firstPage();
       }
+
+      this._previousFilter = keyword;
+
+      this._store.dispatch(InvoiceActions.filterInvoices({ 
+        keyword: keyword ? keyword : "",
+        pageNumber: this.paginator.pageIndex + 1
+      }))
     });
   }
 }
