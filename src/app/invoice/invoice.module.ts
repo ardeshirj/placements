@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatInputModule } from "@angular/material/input";
 import { MatGridListModule } from "@angular/material/grid-list";
+import { MatSortModule } from "@angular/material/sort";
 
 import { InvoiceTableComponent } from "./components/invoice-table.component";
 import { InvoiceEffects } from './effects/invoice.effects';
@@ -26,6 +27,7 @@ import * as fromRoot from "./reducers/invoice.reducer";
     MatPaginatorModule,
     MatInputModule,
     MatGridListModule,
+    MatSortModule,
 
     // forFeature
     StoreModule.forFeature(fromRoot.invoiceFeatureKey, fromRoot.reducer),

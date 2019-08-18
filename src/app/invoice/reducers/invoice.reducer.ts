@@ -17,7 +17,7 @@ export const initialState: State = {
 export const reducer = createReducer(
   initialState,
   on(
-    InvoiceActions.loadedInvoices, 
+    InvoiceActions.adjustedInvoices, 
     (state, { count, invoices }) => (
       { totalCount: count, invoices: invoices }
     )

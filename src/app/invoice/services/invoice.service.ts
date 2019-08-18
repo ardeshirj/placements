@@ -7,25 +7,12 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class InvoiceService {
-  getInvoices(pageNumber: number): Observable<{ count: number, items: Invoice[] }> {
-    const httpParams = new HttpParams().set('_page', String(pageNumber));
-    return this._httpClient.get<Invoice[]>(
-      'http://localhost:3000/invoices',
-      { params: httpParams, observe: 'response' }
-    ).pipe(
-      map(response => {
-        return {
-          count: +response.headers.get('x-total-count'), 
-          items: response.body
-        }
-      })
-    )
-  }
-
-  filterInvoices(keyword: string, pageNumber: number) {
+  filterInvoices(keyword: string, pageNumber: number, sort: string, direction: string) {
     const httpParams = new HttpParams()
       .set('q', keyword)
-      .set('_page', String(pageNumber));
+      .set('_page', String(pageNumber))
+      .set('_sort', sort)
+      .set('_order', direction);
 
     return this._httpClient.get<Invoice[]>(
       'http://localhost:3000/invoices',
