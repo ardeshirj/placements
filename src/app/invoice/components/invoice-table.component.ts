@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, combineLatest, Subscription } from 'rxjs';
-import { debounceTime, startWith, take } from 'rxjs/operators';
+import { debounceTime, startWith } from 'rxjs/operators';
 
 
 import { InvoiceActions } from "../actions";
@@ -32,7 +32,8 @@ export class InvoiceTableComponent implements AfterViewInit {
     'adjustments', 
     'booked_amount', 
     'campaign_name',
-    'line_item_name'
+    'line_item_name',
+    'reviewed'
   ];
 
   private _invoices: Invoice[];
@@ -48,7 +49,10 @@ export class InvoiceTableComponent implements AfterViewInit {
 
     this.filterSubject = new Subject<string>();
 
-    const invoicesSub = this.invoices.subscribe(invoices => this._invoices = invoices);
+    const invoicesSub = this.invoices.subscribe(invoices => {
+      this._invoices = invoices;
+      this.selection.clear();
+    });
 
     const filterSortPaginateSub = combineLatest(
       this.filterSubject.pipe(startWith(null), debounceTime(1000)),
@@ -56,7 +60,7 @@ export class InvoiceTableComponent implements AfterViewInit {
       this.paginator.page.pipe(startWith(null))
     )
     .subscribe(([keyword, sortObject, pageEvent]) => {
-      this._store.dispatch(InvoiceActions.adjustInvoices({ 
+      this._store.dispatch(InvoiceActions.adjust({ 
         keyword: keyword ? keyword : "",
         pageNumber: this.paginator.pageIndex + 1,
         sort: sortObject ? sortObject.active : null,
@@ -90,6 +94,10 @@ export class InvoiceTableComponent implements AfterViewInit {
     this.isAllSelected() ?
         this.selection.clear() :
         this._invoices.forEach(row => this.selection.select(row));
+  }
+
+  onReview() {
+    this._store.dispatch(InvoiceActions.review({ invoices: this.selection.selected }));
   }
   
   ngOnDestroy() {

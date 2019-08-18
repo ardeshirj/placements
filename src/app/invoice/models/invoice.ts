@@ -5,5 +5,6 @@ export interface Invoice{
   booked_amount: number;
   campaign_id: number;
   campaign_name: string;
-  line_item_name: string
+  line_item_name: string;
+  reviewed: boolean;
 }

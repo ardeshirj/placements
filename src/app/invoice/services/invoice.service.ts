@@ -2,12 +2,12 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 
 import { Invoice } from '../models';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of, forkJoin } from 'rxjs';
+import { map, flatMap } from 'rxjs/operators';
 
 @Injectable()
 export class InvoiceService {
-  filterInvoices(keyword: string, pageNumber: number, sort: string, direction: string) {
+  filter(keyword: string, pageNumber: number, sort: string, direction: string) {
     const httpParams = new HttpParams()
       .set('q', keyword)
       .set('_page', String(pageNumber))
@@ -25,6 +25,16 @@ export class InvoiceService {
         }
       })
     )
+  }
+
+  review(invoices: Invoice[]) {
+    const patchObs = invoices.map(invoice => {
+      return this._httpClient.patch<Invoice[]>(
+        `http://localhost:3000/invoices/${invoice.id}`, 
+        { reviewed: true }
+      );
+    })
+    return forkJoin(patchObs);
   }
 
   constructor(
