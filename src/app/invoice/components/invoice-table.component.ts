@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, combineLatest, Subscription, ReplaySubject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject, combineLatest, Subscription } from 'rxjs';
 import { debounceTime, startWith } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
 

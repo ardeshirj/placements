@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Invoice } from '../models';
-import { Observable, of, forkJoin } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class InvoiceService {

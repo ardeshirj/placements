@@ -1,7 +1,6 @@
 import { Invoice } from '../models/invoice';
 import { createReducer, on } from '@ngrx/store';
 import { InvoiceActions } from '../actions';
-import { Directionality } from '@angular/cdk/bidi';
 
 export const invoiceFeatureKey = 'invoiceState';
 
