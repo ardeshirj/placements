@@ -5,14 +5,16 @@
 
   <mat-grid-list cols="1" rowHeight="80px">
     <mat-grid-tile colspan=1>
-      <div class="action-buttons">
+      <div class="action-buttons" *ngIf="selection.selected.length != 0">
       <button mat-raised-button (click)="onReview()"> Review </button>
       <button mat-raised-button (click)="onExportToCSV()"> Export CSV </button>
       </div>
 
       <div class="filter-input">
         <mat-form-field>
-          <input matInput (keyup)="filterSubject.next($event.target.value)" placeholder="Filter">
+          <input matInput 
+                (keyup)="filterSubject.next($event.target.value)" 
+                placeholder="Filter">
         </mat-form-field>
       </div>
     </mat-grid-tile>
