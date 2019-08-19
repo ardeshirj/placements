@@ -5,6 +5,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, combineLatest, Subscription } from 'rxjs';
 import { debounceTime, startWith } from 'rxjs/operators';
+import { saveAs } from "file-saver";
 
 
 import { InvoiceActions } from "../actions";
@@ -98,6 +99,30 @@ export class InvoiceTableComponent implements AfterViewInit {
 
   onReview() {
     this._store.dispatch(InvoiceActions.review({ invoices: this.selection.selected }));
+  }
+
+  onExportToCSV() {
+    const header = [
+      'Actual Amount', 
+      'Adjustments',
+      'Booked Amount',
+      'Campaign Name',
+      'Line Item Name',
+      'Reviewed'
+    ].join(",");
+
+    const csvEntries = [header];
+    this.selection.selected.forEach(invoice => {
+      csvEntries.push(Object.values(invoice).join(","));
+    });
+
+    const csvBlob = new File(
+      [csvEntries.join("\n")], 
+      `invoices-${new Date().toISOString()}.csv`,
+      { type: "data/csv;charset=uft-8"}
+    );
+
+    saveAs(csvBlob);
   }
   
   ngOnDestroy() {

@@ -3,9 +3,14 @@ table {
 }
 
 .action-buttons {
-  position: absolute; left: 5px;
+  position: absolute;
+  left: 5px;
+  button {
+    margin-right: 15px;
+  }
 }
 
 .filter-input {
-  position: absolute; right: 10px;
+  position: absolute; 
+  right: 10px;
 }
