@@ -10,6 +10,8 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { MatSortModule } from "@angular/material/sort";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatButtonModule } from "@angular/material/button";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+
 
 import { InvoiceTableComponent } from "./components/invoice-table.component";
 import { InvoiceEffects } from './effects/invoice.effects';
@@ -32,6 +34,7 @@ import * as fromRoot from "./reducers/invoice.reducer";
     MatSortModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
 
     // forFeature
     StoreModule.forFeature(fromRoot.invoiceFeatureKey, fromRoot.reducer),

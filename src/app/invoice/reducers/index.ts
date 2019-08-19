@@ -1,4 +1,4 @@
-import { Action, combineReducers, createSelector, createFeatureSelector } from "@ngrx/store";
+import { Action, combineReducers, createSelector, createFeatureSelector, createAction } from "@ngrx/store";
 
 import * as fromInvoices from "./invoice.reducer";
 import { Invoice } from '../models';
@@ -26,4 +26,9 @@ export const getInvoices = createSelector(
 export const getTotalCount = createSelector(
   getInvoiceState,
   state => state.totalCount
+)
+
+export const getIsLoading = createSelector(
+  getInvoiceState,
+  state => state.isLoading
 )

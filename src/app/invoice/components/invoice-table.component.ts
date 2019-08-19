@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, combineLatest, Subscription } from 'rxjs';
+import { Observable, Subject, combineLatest, Subscription, ReplaySubject, BehaviorSubject } from 'rxjs';
 import { debounceTime, startWith } from 'rxjs/operators';
 import { saveAs } from "file-saver";
 
@@ -22,11 +22,13 @@ export class InvoiceTableComponent implements AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  selection = new SelectionModel<Invoice>(true, []);
   invoices: Observable<Invoice[]>;
   totalCount: Observable<number>;
+  isLoading: Observable<boolean>;
   filterSubject: Subject<string>;
   subscriptions: Subscription[];
+
+  selection = new SelectionModel<Invoice>(true, []);
   displayedColumns: string[] = [
     'select',
     'actual_amount', 
@@ -47,6 +49,7 @@ export class InvoiceTableComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.invoices = this._store.select(fromInvoices.getInvoices);
     this.totalCount = this._store.select(fromInvoices.getTotalCount);
+    this.isLoading = this._store.select(fromInvoices.getIsLoading);
 
     this.filterSubject = new Subject<string>();
 
