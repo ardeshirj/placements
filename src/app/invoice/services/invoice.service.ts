@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 
 import { Invoice } from '../models';
@@ -20,20 +20,20 @@ export class InvoiceService {
     ).pipe(
       map(response => {
         return {
-          count: +response.headers.get('x-total-count'), 
+          count: +response.headers.get('x-total-count'),
           items: response.body
-        }
+        };
       })
-    )
+    );
   }
 
   review(invoices: Invoice[]) {
     const patchObs = invoices.map(invoice => {
       return this._httpClient.patch<Invoice[]>(
-        `http://localhost:3000/invoices/${invoice.id}`, 
+        `http://localhost:3000/invoices/${invoice.id}`,
         { reviewed: true }
       );
-    })
+    });
     return forkJoin(patchObs);
   }
 

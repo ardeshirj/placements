@@ -1,24 +1,24 @@
-import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, combineLatest, Subscription, ReplaySubject, BehaviorSubject } from 'rxjs';
 import { debounceTime, startWith } from 'rxjs/operators';
-import { saveAs } from "file-saver";
+import { saveAs } from 'file-saver';
 
 
-import { InvoiceActions } from "../actions";
+import { InvoiceActions } from '../actions';
 import { Invoice } from '../models';
-import * as fromInvoices from "../reducers";
+import * as fromInvoices from '../reducers';
 
 @Component({
-  selector: 'invoice-table',
+  selector: 'app-invoice-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './invoice-table.component.html',
   styleUrls: ['./invoice-table.component.scss']
 })
-export class InvoiceTableComponent implements AfterViewInit {
+export class InvoiceTableComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
@@ -31,9 +31,9 @@ export class InvoiceTableComponent implements AfterViewInit {
   selection = new SelectionModel<Invoice>(true, []);
   displayedColumns: string[] = [
     'select',
-    'actual_amount', 
-    'adjustments', 
-    'booked_amount', 
+    'actual_amount',
+    'adjustments',
+    'booked_amount',
     'campaign_name',
     'line_item_name',
     'reviewed'
@@ -64,12 +64,12 @@ export class InvoiceTableComponent implements AfterViewInit {
       this.paginator.page.pipe(startWith(null))
     )
     .subscribe(([keyword, sortObject, pageEvent]) => {
-      this._store.dispatch(InvoiceActions.adjust({ 
-        keyword: keyword ? keyword : "",
+      this._store.dispatch(InvoiceActions.adjust({
+        keyword: keyword ? keyword : '',
         pageNumber: this.paginator.pageIndex + 1,
         sort: sortObject ? sortObject.active : null,
         direction: sortObject ? sortObject.direction : null
-      }))
+      }));
     });
 
     const filterSortSub = combineLatest(
@@ -78,14 +78,14 @@ export class InvoiceTableComponent implements AfterViewInit {
     ).subscribe(() => {
       if (this.paginator.pageIndex !== 1) {
         this.paginator.firstPage();
-      } 
-    })
+      }
+    });
 
     this.subscriptions = [
       invoicesSub,
       filterSortPaginateSub,
       filterSortSub
-    ]
+    ];
   }
 
   isAllSelected() {
@@ -106,28 +106,28 @@ export class InvoiceTableComponent implements AfterViewInit {
 
   onExportToCSV() {
     const header = [
-      'Actual Amount', 
+      'Actual Amount',
       'Adjustments',
       'Booked Amount',
       'Campaign Name',
       'Line Item Name',
       'Reviewed'
-    ].join(",");
+    ].join(',');
 
     const csvEntries = [header];
     this.selection.selected.forEach(invoice => {
-      csvEntries.push(Object.values(invoice).join(","));
+      csvEntries.push(Object.values(invoice).join(','));
     });
 
     const csvBlob = new File(
-      [csvEntries.join("\n")], 
+      [csvEntries.join('\n')],
       `invoices-${new Date().toISOString()}.csv`,
-      { type: "data/csv;charset=uft-8"}
+      { type: 'data/csv;charset=uft-8'}
     );
 
     saveAs(csvBlob);
   }
-  
+
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }

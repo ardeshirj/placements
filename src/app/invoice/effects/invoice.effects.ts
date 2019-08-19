@@ -1,12 +1,11 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { Store, select } from '@ngrx/store';
-import { flatMap, map, withLatestFrom, concatMap, tap } from "rxjs/operators"
+import { flatMap, map, withLatestFrom, concatMap } from 'rxjs/operators';
 
-import { InvoiceActions } from "../actions";
+import { InvoiceActions } from '../actions';
 import { InvoiceService } from '../services/invoice.service';
-import * as fromInvoice from "../reducers";
-import { invoiceFeatureKey } from '../reducers/invoice.reducer';
+import * as fromInvoice from '../reducers';
 import { of } from 'rxjs/internal/observable/of';
 
 @Injectable()
@@ -17,20 +16,20 @@ export class InvoiceEffects {
       flatMap(({ keyword, pageNumber, sort, direction }) => {
         return this._invoiceService.filter(keyword, pageNumber, sort, direction);
       }),
-      map(invoices => InvoiceActions.adjusted({ 
+      map(invoices => InvoiceActions.adjusted({
         count: invoices.count,
-        invoices: invoices.items 
+        invoices: invoices.items
       }))
-    )
-  })
+    );
+  });
 
   review = createEffect(() => {
     return this._actions.pipe(
       ofType(InvoiceActions.review),
       flatMap(({ invoices }) => this._invoiceService.review(invoices)),
       map(_ =>  InvoiceActions.reviewed())
-    )
-  })
+    );
+  });
 
   readjustOnReview = createEffect(() => {
     return this._actions.pipe(
@@ -44,16 +43,16 @@ export class InvoiceEffects {
           pageNumber: state.pageNumber,
           sort: state.sort,
           direction: state.direction
-        })
+        });
       })
-    )
-  })
+    );
+  });
 
   constructor(
     private _actions: Actions,
     private _invoiceService: InvoiceService,
     private _store: Store<fromInvoice.InvoiceState>
   ) {
-    
+
   }
 }

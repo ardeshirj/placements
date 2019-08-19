@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { reducers, metaReducers } from './reducers';
 import { environment } from '../environments/environment';
 import { AppEffects } from './app.effects';
-import { AppRoutingModule } from "./app.routing.module";
+import { AppRoutingModule } from './app.routing.module';
 import { InvoiceModule } from './invoice/invoice.module';
 
 @NgModule({
@@ -23,7 +23,7 @@ import { InvoiceModule } from './invoice/invoice.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     InvoiceModule,
-    
+
     // forRoot
     StoreModule.forRoot(reducers, {
       metaReducers,

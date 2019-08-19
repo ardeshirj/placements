@@ -9,10 +9,10 @@ export interface State {
   isLoading: boolean;
   invoices: Invoice[];
   totalCount: number;
-  pageNumber: number,
-  keyword: string,
-  sort: string,
-  direction: string,
+  pageNumber: number;
+  keyword: string;
+  sort: string;
+  direction: string;
 }
 
 export const initialState: State = {
@@ -23,35 +23,35 @@ export const initialState: State = {
   keyword: null,
   sort: null,
   direction: null
-}
+};
 
 export const reducer = createReducer(
   initialState,
-  on(InvoiceActions.adjust, 
+  on(InvoiceActions.adjust,
     (state, { keyword, pageNumber, sort, direction }) => (
-      { 
+      {
         ...state,
         isLoading: true,
-        pageNumber: pageNumber, 
-        sort: sort, 
-        direction: direction,
-        keyword: keyword
+        pageNumber,
+        sort,
+        direction,
+        keyword
       }
     )
   ),
   on(
-    InvoiceActions.adjusted, 
+    InvoiceActions.adjusted,
     (state, { count, invoices }) => (
-      { 
+      {
         ...state,
         isLoading: false,
-        totalCount: count, 
-        invoices: invoices
+        totalCount: count,
+        invoices
       }
     )
   ),
   on(
-    InvoiceActions.reviewed, 
+    InvoiceActions.reviewed,
     (state) => ({ ...state, isLoading: false })
   )
-)
+);

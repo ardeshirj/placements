@@ -1,7 +1,6 @@
-import { Action, combineReducers, createSelector, createFeatureSelector, createAction } from "@ngrx/store";
+import { Action, combineReducers, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import * as fromInvoices from "./invoice.reducer";
-import { Invoice } from '../models';
+import * as fromInvoices from './invoice.reducer';
 
 export interface InvoiceState {
   // All states in this module...
@@ -21,14 +20,14 @@ export const getInvoiceState = createFeatureSelector<InvoiceState, fromInvoices.
 export const getInvoices = createSelector(
   getInvoiceState,
   state => state.invoices
-)
+);
 
 export const getTotalCount = createSelector(
   getInvoiceState,
   state => state.totalCount
-)
+);
 
 export const getIsLoading = createSelector(
   getInvoiceState,
   state => state.isLoading
-)
+);

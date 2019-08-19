@@ -1,5 +1,5 @@
-import * as InvoiceActions from "./invoice.actions";
+import * as InvoiceActions from './invoice.actions';
 
 export {
   InvoiceActions
-}
+};

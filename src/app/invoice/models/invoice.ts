@@ -1,4 +1,4 @@
-export interface Invoice{
+export interface Invoice {
   id: number;
   actual_amount: number;
   adjustments: number;
