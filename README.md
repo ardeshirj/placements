@@ -66,14 +66,13 @@ This component is located in `src/app/invoice/components/invoice-table.component
 that's where all the magic for this app happens. The component is listening to some part of the state
 using `store.select`. For example it is listening to invoices in state using:
 `this.invoices = store.select(fromInvoices.getInvoices`.
+
 The select will return an Observable (stream of data) that we can simply pipe it to `async` pipe in
 the template. This help us to bind invoices object with table's `dataSource` asynchronous.
-`<table [dataSource]="invoices | async> `
-Now once `invoices` changes in state, the new data will be set to `dataSource`. Magic!
+`<table [dataSource]="invoices | async> ` Now once `invoices` changes in state, the new data will be set to `dataSource`. Magic!
 
 Almost all user actions with this component (paginate, filter, etc...) should cause an action to get
-dispatched to store, and store will update the state using reducer and make necessary http calls using
-effects and services, and the component will get updated as state changes.
+dispatched to store, and store will update the state using reducer and make necessary http calls using effects and services, and the component will get updated as state changes.
 
 ## Tests
 There are some unit tests written for reducer, effects and services. You can checkout the specs files in relative directories. For example, for reducers you should find the spec file in:
@@ -85,3 +84,9 @@ yarn test # ng test
 
 # This will start Karma to run the spec files.
 ```
+
+## Improvements
+- Add CI/CD integration
+- Add log service
+- Add global error handling for http errors
+- Add http interceptor to log http calls
